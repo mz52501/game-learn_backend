@@ -1,6 +1,7 @@
 package com.example.user_experience_backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class Subjects {
 
     @OneToMany(mappedBy = "subject")  // One subject can have many game instances
     private List<Gameinstance> gameinstances;
-
+    
     @OneToMany(mappedBy = "subject")
     private List<Gamesubject> gamesubjects;
 

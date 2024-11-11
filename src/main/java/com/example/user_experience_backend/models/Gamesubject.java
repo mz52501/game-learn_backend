@@ -1,6 +1,8 @@
 package com.example.user_experience_backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,15 +17,19 @@ public class Gamesubject {
 
     @ManyToOne
     @JoinColumn(name = "game_id")
+    @JsonIgnore
     private Games game;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
+    @JsonIgnore
     private Subjects subject;
 
     @ManyToOne
     @JoinColumn(name = "gamedata_id")
+    @JsonIgnore
     private Gamedata gamedata;
+    
     private String contentType;
 
     public Games getGame() {

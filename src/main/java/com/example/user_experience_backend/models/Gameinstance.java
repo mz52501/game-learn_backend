@@ -1,6 +1,7 @@
 package com.example.user_experience_backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,14 +15,17 @@ public class Gameinstance {
 
     @ManyToOne  // Many game instances can belong to one user
     @JoinColumn(name = "user_id", nullable = false)  // Foreign key to User
+    @JsonIgnore
     private Users user;
 
     @ManyToOne  // Many game instances can be associated with one game
     @JoinColumn(name = "game_id", nullable = false)  // Foreign key to Game
+    @JsonIgnore
     private Games game;
 
     @ManyToOne  // Many game instances can be associated with one game
     @JoinColumn(name = "subject_id", nullable = false)  // Foreign key to Game
+    @JsonIgnore
     private Subjects subject;
 
     private long score;
