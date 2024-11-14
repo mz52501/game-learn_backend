@@ -1,5 +1,6 @@
 package com.example.user_experience_backend.service;
 
+import com.example.user_experience_backend.models.Gamedata;
 import com.example.user_experience_backend.models.Games;
 import com.example.user_experience_backend.models.Gamesubject;
 import com.example.user_experience_backend.models.Subjects;
@@ -32,6 +33,17 @@ public class GamesService {
                 if (!games.contains(gs.getGame())) games.add(gs.getGame());
             }
             return games;
+        } else return null;
+    }
+
+    public List<Gamedata> getGamedataForSubjectGame(Long subjectId, Long gameId) {
+        Subjects subject = subjectsRepository.findById(subjectId).orElse(null);
+        if (subject != null) {
+            List<Gamedata> gameData = new LinkedList<>();
+            for (Gamesubject gs : subject.getGamesubjects()) {
+                if (gs.getGame().getGameId() == gameId) gameData.add(gs.getGamedata());
+            }
+            return gameData;
         } else return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.user_experience_backend.controller;
 
+import com.example.user_experience_backend.models.Gamedata;
 import com.example.user_experience_backend.models.Games;
 import com.example.user_experience_backend.models.Subjects;
 import com.example.user_experience_backend.repository.GamesRepository;
@@ -36,6 +37,23 @@ public class GamesController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/subject/{subjectId}/games/{gameId}")
+    public ResponseEntity<List<Gamedata>> getGamedataForSubjectGame(@PathVariable Long subjectId, @PathVariable Long gameId) {
+        List<Gamedata> gamedata = gamesService.getGamedataForSubjectGame(subjectId, gameId);
+        if (gamedata != null) {
+            return ResponseEntity.ok(gamedata);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/game/{id}")
+    public ResponseEntity<Games> getGameById(@PathVariable Long id) {
+        return gamesRepository.findById(id)
+            .map(ResponseEntity::ok) // If present, return HTTP 200 with the game
+            .orElseGet(() -> ResponseEntity.notFound().build()); // If not present, return HTTP 404
     }
 
 }
