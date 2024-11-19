@@ -29,7 +29,7 @@ public class Progress {
     @JsonIgnore
     private Games game;
 
-    private String progressLevel;
+    private Long progressLevel;
 
     private java.sql.Timestamp lastPlayed;
 
@@ -70,11 +70,11 @@ public class Progress {
         this.game = game;
     }
 
-    public String getProgressLevel() {
+    public Long getProgressLevel() {
         return progressLevel;
     }
 
-    public void setProgressLevel(String progressLevel) {
+    public void setProgressLevel(Long progressLevel) {
         this.progressLevel = progressLevel;
     }
 
@@ -105,4 +105,14 @@ public class Progress {
         this.badgesUnlocked = badgesUnlocked;
     }
 
+    @Override
+    public String toString() {
+        return "Progress{" +
+            "progressId=" + progressId +
+            ", progressLevel='" + progressLevel + '\'' +
+            ", totalPoints=" + totalPoints +
+            ", lastPlayed=" + lastPlayed +
+            ", badgesUnlocked='" + badgesUnlocked + '\'' +
+            '}';
+    }
 }

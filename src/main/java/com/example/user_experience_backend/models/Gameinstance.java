@@ -30,7 +30,8 @@ public class Gameinstance {
 
     private long score;
 
-    private String accuracy;
+    @Column(name = "max_score")
+    private long maxScore;
 
     private java.sql.Timestamp startTime;
 
@@ -78,12 +79,12 @@ public class Gameinstance {
     }
 
 
-    public String getAccuracy() {
-        return accuracy;
+    public long getMaxScore() {
+        return maxScore;
     }
 
-    public void setAccuracy(String accuracy) {
-        this.accuracy = accuracy;
+    public void setMaxScore(long maxScore) {
+        this.maxScore = maxScore;
     }
 
 
