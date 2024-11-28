@@ -1,5 +1,6 @@
 package com.example.user_experience_backend.service;
 
+import com.example.user_experience_backend.DTO.LoginDTO;
 import com.example.user_experience_backend.DTO.ProgressDTO;
 import com.example.user_experience_backend.DTO.SubjectDTO;
 import com.example.user_experience_backend.models.*;
@@ -88,5 +89,11 @@ public class GamesService {
         }
 
         return subjectDTOs;
+    }
+
+    public Users checkAuth(LoginDTO loginDTO) {
+        return usersRepository.findByUsername(loginDTO.getUsername())
+            .filter(user -> user.getPassword().equals(loginDTO.getPassword()))
+            .orElse(null);
     }
 }

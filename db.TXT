@@ -1,0 +1,83 @@
+create table users (
+	user_id serial primary key,
+	username varchar(30),
+	dob date
+);
+
+create table subjects (
+	subject_id serial primary key,
+	name varchar(40)
+);
+
+create table games (
+	game_id serial primary key,
+	name varchar (30),
+	description varchar(255)
+);
+
+CREATE TABLE gameInstance (
+    gameInstance_id serial PRIMARY KEY,
+    user_id INT,
+    game_id INT,
+    subject_id INT,
+    score INT,
+	accuracy numeric(5, 2),
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (game_id) REFERENCES games(game_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
+);
+
+CREATE TABLE progress (
+    progress_id serial PRIMARY KEY,
+    user_id INT,
+    subject_id INT,
+    game_id INT,
+    progress_level VARCHAR(50),   -- e.g., 'Not Started', 'In Progress', 'Completed'
+	last_played timestamp,
+	total_points int,
+	badges_unlocked varchar(255),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects(subject_id),
+    FOREIGN KEY (game_id) REFERENCES games(game_id)
+);
+
+CREATE TABLE gameData (
+    gameData_id serial PRIMARY KEY,
+    difficulty_level INT,      -- Optional for difficulty scaling
+	name varchar(255),
+	image_path varchar(255)
+);
+
+CREATE TABLE numbers (
+    number_id serial PRIMARY KEY,
+    gameData_id INT,            -- Foreign key to `gameData`
+    value INT,                 -- The actual number (e.g., 3, 7, 10)
+    FOREIGN KEY (gameData_id) REFERENCES gameData(gameData_id)
+);
+
+CREATE TABLE words (
+    word_id serial PRIMARY KEY,
+    gameData_id INT,            -- Foreign key to `gameData`
+    category VARCHAR(255),          -- The word (e.g., apple)
+    FOREIGN KEY (gameData_id) REFERENCES gameData(gameData_id)
+);
+
+CREATE TABLE shapes (
+    shapes_id serial PRIMARY KEY,
+    gameData_id INT,            -- Foreign key to `gameData`
+    FOREIGN KEY (gameData_id) REFERENCES gameData(gameData_id)
+);
+
+
+CREATE TABLE gameSubject (
+    gameSubject_id serial PRIMARY KEY,
+    game_id INT,
+    subject_id INT,
+    gameData_id INT,              -- Reference to the GameData (supertype) table
+    content_type VARCHAR(50),     -- 'number', 'word', 'shape'
+    FOREIGN KEY (game_id) REFERENCES games(game_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects(subject_id),
+    FOREIGN KEY (gameData_id) REFERENCES gameData(gameData_id)
+);

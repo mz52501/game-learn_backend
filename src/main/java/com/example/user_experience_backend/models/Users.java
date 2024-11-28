@@ -18,6 +18,8 @@ public class Users {
 
     private java.sql.Date dob;
 
+    private String password;
+
     @OneToMany(mappedBy = "user")  // One user can have many game instances
     private List<Gameinstance> gameinstances;
 
@@ -48,6 +50,14 @@ public class Users {
 
     public void setDob(java.sql.Date dob) {
         this.dob = dob;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Gameinstance> getGameinstances() {
