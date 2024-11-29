@@ -1,5 +1,6 @@
 package com.example.user_experience_backend.service;
 
+import com.example.user_experience_backend.DTO.GameCompleteDTO;
 import com.example.user_experience_backend.DTO.LoginDTO;
 import com.example.user_experience_backend.DTO.ProgressDTO;
 import com.example.user_experience_backend.DTO.SubjectDTO;
@@ -95,5 +96,50 @@ public class GamesService {
         return usersRepository.findByUsername(loginDTO.getUsername())
             .filter(user -> user.getPassword().equals(loginDTO.getPassword()))
             .orElse(null);
+    }
+
+    public void completeGame(GameCompleteDTO request) {
+        Users user = usersRepository.findById(request.getUserId()).orElse(null);
+        Subjects subject = subjectsRepository.findById(request.getSubjectId()).orElse(null);
+        Games game = gamesRepository.findById(request.getGameId()).orElse(null);
+        // 1. Save the game instance
+        Gameinstance gameInstance = new Gameinstance();
+        gameInstance.setUser(user);
+        gameInstance.setSubject(subject);
+        gameInstance.setGame(game);
+        gameInstance.setStartTime(request.getStartTime());
+        gameInstance.setEndTime(request.getEndTime());
+        gameInstance.setScore(request.getScore());
+        gameInstance.setMaxScore(request.getMaxScore());
+        gameinstanceRepository.save(gameInstance);
+
+        // 2. Update the progress table
+        Progress progress = progressRepository.findByUserAndSubjectAndGame(user, subject, game)
+            .orElseGet(() -> {
+                Progress newProgress = new Progress();
+                newProgress.setUser(user);
+                newProgress.setSubject(subject);
+                newProgress.setGame(game);
+                newProgress.setProgressLevel(1L); // Initialize at level 1
+                newProgress.setTotalPoints(0L);  // Initialize with 0 points
+                return newProgress;
+            });
+
+        // Update progress details
+        progress.setLastPlayed(request.getEndTime());
+        progress.setTotalPoints(progress.getTotalPoints() + request.getScore());
+        calculateNewLevelTotalPoints(progress);
+
+
+        progressRepository.save(progress);
+    }
+
+    private void calculateNewLevelTotalPoints(Progress progress) {
+        int basePoints = 100;
+        double growthFactor = 1.5;
+        if (progress.getTotalPoints() > basePoints * (Math.pow(growthFactor, (progress.getProgressLevel() - 1)))) {
+            progress.setTotalPoints((long) (progress.getTotalPoints() - (basePoints * (Math.pow(growthFactor, (progress.getProgressLevel() - 1))))));
+            progress.setProgressLevel(progress.getProgressLevel() + 1);
+        }
     }
 }
